@@ -1,6 +1,6 @@
 specVersion: 0.0.2
-description: Pancake Profile
-repository: https://github.com/pancakeswap
+description: Desire Profile
+repository: https://github.com/ifelsedeveloper
 schema:
   file: ./schema.graphql
 dataSources:
@@ -8,7 +8,7 @@ dataSources:
     name: Profile
     network: bsc
     source:
-      address: '0xDf4dBf6536201370F95e06A0F8a7a70fE40E388a'
+      address: '0x6e47EdBfc6F29f03188B23b35aE04f370121ffED'
       abi: Profile
       startBlock: 4570433
     mapping:

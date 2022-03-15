@@ -6,6 +6,9 @@ import { ZERO_BD, factoryContract, ADDRESS_ZERO, ONE_BD } from "./utils";
 let WBNB_ADDRESS = "0xbb4cdb9cbd36b01bd1cbaebf2de08d9173bc095c";
 let BUSD_DESIRE_PAIR = "0x8b0ad45437c5b7d923e67a305c2b0fe178683f7b";
 let DESIRE_WBNB_PAIR = "0xd3cbd6eeaed5b7a6f873c323107ae2aa2d640055";
+let TASTE_WBNB_PAIR = "0x92b52d1b7a07ed3b4456259cfa42a4fbe9dde4b2";
+let DESIRE_ADDRESS = "0xc8846b0877cec21336ba3136208fd02d42ac7b5e";
+let TASTE_ADDRESS = "0xdb238123939637d65a03e4b2b485650b4f9d91cb";
 
 export function getBnbPriceInUSD(): BigDecimal {
   // fetch eth prices for each stablecoin
@@ -53,6 +56,7 @@ export function findBnbPerToken(token: Token): BigDecimal {
   if (token.id == WBNB_ADDRESS) {
     return ONE_BD;
   }
+  
   // loop through whitelist and check if paired with any
   for (let i = 0; i < WHITELIST.length; ++i) {
     let pairAddress = factoryContract.getPair(Address.fromString(token.id), Address.fromString(WHITELIST[i]));
@@ -65,6 +69,36 @@ export function findBnbPerToken(token: Token): BigDecimal {
       if (pair.token1 == token.id && pair.reserveBNB.gt(MINIMUM_LIQUIDITY_THRESHOLD_BNB)) {
         let token0 = Token.load(pair.token0);
         return pair.token0Price.times(token0.derivedBNB as BigDecimal); // return token0 per our token * BNB per token 0
+      }
+    } else {
+      // calculate in multihops taste/token
+      let pairTasteAddress = factoryContract.getPair(Address.fromString(token.id), Address.fromString(TASTE_ADDRESS));
+      if (pairTasteAddress.toHex() != ADDRESS_ZERO) {
+        let pair = Pair.load(pairTasteAddress.toHex());
+        let tasteWbnbPair = Pair.load(TASTE_WBNB_PAIR);
+        if (tasteWbnbPair !== null) {
+          if (pair.token0 == token.id && pair.reserveBNB.gt(MINIMUM_LIQUIDITY_THRESHOLD_BNB)) {
+            return pair.token0Price.times(tasteWbnbPair.token0Price); // return token1 per our token * BNB per token 1
+          }
+          if (pair.token1 == token.id && pair.reserveBNB.gt(MINIMUM_LIQUIDITY_THRESHOLD_BNB)) {
+            return pair.token1Price.times(tasteWbnbPair.token0Price); // return token1 per our token * BNB per token 1
+          }
+        }
+      }
+
+      // calculate in multihops desire/token
+      let pairDesireAddress = factoryContract.getPair(Address.fromString(token.id), Address.fromString(DESIRE_ADDRESS));
+      if (pairDesireAddress.toHex() != ADDRESS_ZERO) {
+        let pair = Pair.load(pairDesireAddress.toHex());
+        let desireWbnbPair = Pair.load(DESIRE_WBNB_PAIR);
+        if (desireWbnbPair !== null) {
+          if (pair.token0 == token.id && pair.reserveBNB.gt(MINIMUM_LIQUIDITY_THRESHOLD_BNB)) {
+            return pair.token0Price.times(desireWbnbPair.token0Price); // return token1 per our token * BNB per token 1
+          }
+          if (pair.token1 == token.id && pair.reserveBNB.gt(MINIMUM_LIQUIDITY_THRESHOLD_BNB)) {
+            return pair.token1Price.times(desireWbnbPair.token0Price); // return token1 per our token * BNB per token 1
+          }
+        }
       }
     }
   }

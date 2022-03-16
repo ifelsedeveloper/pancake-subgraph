@@ -56,7 +56,7 @@ export function findBnbPerToken(token: Token): BigDecimal {
   if (token.id == WBNB_ADDRESS) {
     return ONE_BD;
   }
-  
+
   // loop through whitelist and check if paired with any
   for (let i = 0; i < WHITELIST.length; ++i) {
     let pairAddress = factoryContract.getPair(Address.fromString(token.id), Address.fromString(WHITELIST[i]));
@@ -78,10 +78,10 @@ export function findBnbPerToken(token: Token): BigDecimal {
         let tasteWbnbPair = Pair.load(TASTE_WBNB_PAIR);
         if (tasteWbnbPair !== null) {
           if (pair.token0 == token.id && pair.reserveBNB.gt(MINIMUM_LIQUIDITY_THRESHOLD_BNB)) {
-            return pair.token0Price.times(tasteWbnbPair.token0Price); // return token1 per our token * BNB per token 1
+            return pair.token1Price.times(tasteWbnbPair.token0Price); // return token1 per our token * BNB per token 1
           }
           if (pair.token1 == token.id && pair.reserveBNB.gt(MINIMUM_LIQUIDITY_THRESHOLD_BNB)) {
-            return pair.token1Price.times(tasteWbnbPair.token0Price); // return token1 per our token * BNB per token 1
+            return pair.token0Price.times(tasteWbnbPair.token0Price); // return token1 per our token * BNB per token 1
           }
         }
       }
@@ -93,10 +93,10 @@ export function findBnbPerToken(token: Token): BigDecimal {
         let desireWbnbPair = Pair.load(DESIRE_WBNB_PAIR);
         if (desireWbnbPair !== null) {
           if (pair.token0 == token.id && pair.reserveBNB.gt(MINIMUM_LIQUIDITY_THRESHOLD_BNB)) {
-            return pair.token0Price.times(desireWbnbPair.token0Price); // return token1 per our token * BNB per token 1
+            return pair.token1Price.times(desireWbnbPair.token0Price); // return token1 per our token * BNB per token 1
           }
           if (pair.token1 == token.id && pair.reserveBNB.gt(MINIMUM_LIQUIDITY_THRESHOLD_BNB)) {
-            return pair.token1Price.times(desireWbnbPair.token0Price); // return token1 per our token * BNB per token 1
+            return pair.token0Price.times(desireWbnbPair.token0Price); // return token1 per our token * BNB per token 1
           }
         }
       }

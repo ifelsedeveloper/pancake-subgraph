@@ -8,8 +8,7 @@ let DESIRE_BUSD_PAIR = "0x8b0ad45437c5b7d923e67a305c2b0fe178683f7b";
 let WBNB_DESIRE_PAIR = "0xd3cbd6eeaed5b7a6f873c323107ae2aa2d640055";
 let BUSD_WBNB_PAIR = "0xb952ee5f46763ba0a1b8a0110661bcf6203f5657";
 
-export function getBnbPriceInUSD(): BigDecimal {  
-
+export function getBnbPriceInUSD(): BigDecimal {
   let busdPair = Pair.load(BUSD_WBNB_PAIR); // busd is token1
   if (busdPair !== null) {
     return busdPair.token1Price;
@@ -18,10 +17,10 @@ export function getBnbPriceInUSD(): BigDecimal {
   // fetch eth prices for each stablecoin
   let desireBusdPair = Pair.load(DESIRE_BUSD_PAIR);
   let wbnbDesirePair = Pair.load(WBNB_DESIRE_PAIR);
-  if(wbnbDesirePair != null && desireBusdPair != null) {
+  if (wbnbDesirePair != null && desireBusdPair != null) {
     return desireBusdPair.token1Price.times(wbnbDesirePair.token1Price);
   }
-  
+
   return ZERO_BD;
 }
 
@@ -35,7 +34,7 @@ let WHITELIST: string[] = [
   "0x7130d2a12b9bcbfae4f2634d864a1ee1ce3ead9c", // BTCB
   "0x2170ed0880ac9a755fd29b2688956bd959f933f8", // WETH
   "0xdb238123939637d65a03e4b2b485650b4f9d91cb", // TASTE
-  "0xc8846b0877cec21336ba3136208fd02d42ac7b5e"  // DESIRE
+  "0xc8846b0877cec21336ba3136208fd02d42ac7b5e", // DESIRE
 ];
 
 // minimum liquidity for price to get tracked

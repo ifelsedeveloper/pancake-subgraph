@@ -1,7 +1,7 @@
 {
   "name": "prediction-v2",
   "description": "Desire Subgraph",
-  "version": "1.0.0",
+  "version": "1.0.2",
   "repository": "git@github.com:ifelsedeveloper/pancake-subgraph.git",
   "author": "Desire",
   "license": "GPL-3.0-or-later",
